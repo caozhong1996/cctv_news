@@ -5,10 +5,9 @@ from bs4 import BeautifulSoup
 import time
 import xlwt
 
-
-SLEEP_TIME = 3 #爬取每个新闻网页的间隔时间，单位为秒
+SLEEP_TIME = 0.5 #爬取每个新闻网页的间隔时间，单位为秒
 END_TIME = '20190617' #爬取新闻的截至时间
-REQUESTS_DAYS = 1 #截至时间之前往后推多少天#167
+REQUESTS_DAYS = 167 #截至时间之前往后推多少天
 
 urls = []
 dates = []
@@ -41,10 +40,12 @@ def set_style(name,height,bold=False):
     style.font = font
     return style
 
+STYLE = set_style('Times New Roman',400,True)
+
 print('====正在爬取新闻地址！====')
 
 for date in day_list:
-    time.sleep(SLEEP_TIME)
+    time.sleep(1)
     url = 'http://tv.cctv.com/lm/xwlb/day/' + date + '.shtml'
     res = requests.get(url)
     res.encoding='utf-8'
@@ -58,7 +59,6 @@ for date in day_list:
 print('====地址请求完毕，开始请求正文！====') 
 
 for index, url in enumerate(urls):
-    print('====正在爬取第' + str(index) + '条！====') 
     time.sleep(SLEEP_TIME)
     res = requests.get(url)
     res.encoding='utf-8'
@@ -67,6 +67,7 @@ for index, url in enumerate(urls):
     titles.append(clear_sentence(title))
     content = bs4.find('div', class_='cnt_bd').getText()
     contents.append(clear_sentence(content))
+    print('====共'+ str(len(urls)) +'条,已爬取第' + str(index + 1) + '条！====') 
 
 print('====正文请求完毕，开始写入文件！====') 
 
@@ -77,12 +78,11 @@ def write_excel():
     row0 = ["time","title","content"]
     #写第一行
     for i in range(0,len(row0)):
-        sheet1.write(0,i,row0[i],set_style('Times New Roman',220,True))
-    #写第二行
+        sheet1.write(0,i,row0[i],STYLE)
     for i in range(0,len(titles)):
-        sheet1.write(i + 1, 0, dates[i], set_style('Times New Roman',400,True))
-        sheet1.write(i + 1, 1, titles[i], set_style('Times New Roman',400,True))
-        sheet1.write(i + 1, 2, contents[i], set_style('Times New Roman',400,True))
+        sheet1.write(i + 1, 0, dates[i], STYLE)
+        sheet1.write(i + 1, 1, titles[i], STYLE)
+        sheet1.write(i + 1, 2, contents[i], STYLE)
 
     f.save('test.xls')
 
