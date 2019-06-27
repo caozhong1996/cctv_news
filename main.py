@@ -5,9 +5,9 @@ from bs4 import BeautifulSoup
 import time
 import xlwt
 
-SLEEP_TIME = 0.5 #爬取每个新闻网页的间隔时间，单位为秒
-END_TIME = '20190617' #爬取新闻的截至时间
-REQUESTS_DAYS = 167 #截至时间之前往后推多少天
+SLEEP_TIME = 0.5 # 爬取每个新闻网页的间隔时间，单位为秒
+END_TIME = '20190617' # 爬取新闻的截至时间
+REQUESTS_DAYS = 167 # 爬取截至时间之前多少天的新闻
 
 urls = []
 dates = []
